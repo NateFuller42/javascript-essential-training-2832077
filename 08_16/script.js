@@ -6,6 +6,9 @@
  * - Append each backpack object to the <main> element.
  */
 import Backpack from "./components/Backpack.js";
+import backpackObjectArray from "./components/data.js";
+
+const myObjArray = backpackObjectArray;
 
 const everydayPack = new Backpack(
   "pack01",
@@ -20,40 +23,60 @@ const everydayPack = new Backpack(
   "../assets/images/everyday.svg"
 );
 
-const content = `
+
+
+const articleCreator = (backpack) => {
+  return `
     <figure class="backpack__image">
-      <img src=${everydayPack.image} alt="" />
+      <img src=${backpack.image} alt="" />
     </figure>
-    <h1 class="backpack__name">${everydayPack.name}</h1>
+    <h1 class="backpack__name">${backpack.name}</h1>
     <ul class="backpack__features">
       <li class="packprop backpack__volume">Volume:<span> ${
-        everydayPack.volume
-      }l</span></li>
+    backpack.volume
+  }l</span></li>
       <li class="packprop backpack__color">Color:<span> ${
-        everydayPack.color
-      }</span></li>
-      <li class="backpack__age">Age:<span> ${everydayPack.backpackAge()} days old</span></li>
+    backpack.color
+  }</span></li>
+      <li class="backpack__age">Age:<span> ${backpack.backpackAge()} days old</span></li>
       <li class="packprop backpack__pockets">Number of pockets:<span> ${
-        everydayPack.pocketNum
-      }</span></li>
+    backpack.pocketNum
+  }</span></li>
       <li class="packprop backpack__strap">Left strap length:<span> ${
-        everydayPack.strapLength.left
-      } inches</span></li>
+    backpack.strapLength.left
+  } inches</span></li>
       <li class="packprop backpack__strap">Right strap length:<span> ${
-        everydayPack.strapLength.right
-      } inches</span></li>
+    backpack.strapLength.right
+  } inches</span></li>
       <li class="feature backpack__lid">Lid status:<span> ${
-        everydayPack.lidOpen ? "open" : "closed"
-      }</span></li>
+    backpack.lidOpen ? "open" : "closed"
+  }</span></li>
     </ul>
-  
 `;
+}
+
+// New Method Here.
+const myNewMethod = () => {
+  console.log(myObjArray)
+  let HTMLnodes =[];
+  myObjArray.forEach((backpack) => {
+    let myElement = document.createElement("article");
+    myElement.classList.add('backpack');
+    myElement.setAttribute("id",backpack.name);
+    myElement.innerHTML = articleCreator(backpack);
+    console.log(myElement);
+    HTMLnodes.push(myElement);
+  })
+
+  return HTMLnodes;
+
+}
 
 const main = document.querySelector(".maincontent");
 
-const newArticle = document.createElement("article");
-newArticle.classList.add("backpack");
-newArticle.setAttribute("id", "everyday");
-newArticle.innerHTML = content;
 
-main.append(newArticle);
+const HTMLData = myNewMethod();
+console.log(HTMLData);
+HTMLData.forEach((element) => {
+  main.append(element);
+})
