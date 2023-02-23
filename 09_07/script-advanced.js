@@ -40,30 +40,48 @@ const lidToggle = function (event, button, newArg) {
     : (status.innerText = "closed");
 };
 
-const formEvent = function(event, button, backpack){
-  let backpackObject = backpackObjectArray.find(
-    ({ id }) => id === backpack.id
-  );
-
-
-
-  console.log("Made it to my event function!")
-  console.log(event);
-}
+// const formEvent = function(event, button, backpack){
+//   let backpackObject = backpackObjectArray.find(
+//     ({ id }) => id === backpack.id
+//   );
+//   let inputVal = button.previousElementSibling;
+//   let dataSide = inputVal.getAttribute("data-side");
+//   let idQuery = dataSide+"form";
+//   let displayText;
+//   if(dataSide ==='right'){
+//     backpackObject.strapLength.right = inputVal.value;
+//     displayText = backpack.querySelector(idQuery)
+//     displayText.innerText = inputVal.value;
+//   }
+//   else{
+//     backpackObject.strapLength.left = inputVal.value;
+//   }
+//   console.log(button.previousElementSibling.value);
+//
+//   console.log("Made it to my event function!")
+//   console.log(backpackObject);
+// }
 const strapForm = function (elements) {
   console.log(elements)
   elements.forEach((indvElement) =>{
     let newForm = document.createElement("form");
     let sideAttr = indvElement.getAttribute('data-side');
-    console.log('Im here!')
-    let formContent = `
-    <input type ="number" id="${sideAttr}length" name="${sideAttr}form">
-    <button type="button" class="strap-button" id="${sideAttr}-strap-button">Set ${sideAttr} Length</button>
+    console.log('Im here!');
+    newForm.innerHTML = `
+    <input type ="number" id="${sideAttr}length" data-side="${sideAttr}" name="${sideAttr}form">
+    <button>Set ${sideAttr} Length</button>
     `;
-    newForm.innerHTML = formContent;
+
+    newForm.addEventListener("submit",(e)=>{
+      e.preventDefault();
+      let textVal = newForm.querySelector("input").value;
+      indvElement.querySelector("span").innerHTML = `${textVal} inches`;
+
+    })
+
     indvElement.append(newForm);
-  })
-}
+  });
+};
 
 const backpackList = backpackObjectArray.map((backpack) => {
   let backpackArticle = document.createElement("article");
@@ -102,14 +120,6 @@ const backpackList = backpackObjectArray.map((backpack) => {
 
   let strapElements = backpackArticle.querySelectorAll(".backpack__strap");
   strapForm(strapElements);
-
-  const strapButtons = backpackArticle.querySelectorAll(".strap-button");
-  strapButtons.forEach((indvButton)=>{
-    indvButton.addEventListener("click",(event)=>{
-      formEvent(event,indvButton,backpackArticle);
-    })
-
-  })
 
   let button = backpackArticle.querySelector(".lid-toggle");
   let newArg = "The argument I want to pass to the callback function!";
