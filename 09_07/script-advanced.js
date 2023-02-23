@@ -40,6 +40,31 @@ const lidToggle = function (event, button, newArg) {
     : (status.innerText = "closed");
 };
 
+const formEvent = function(event, button, backpack){
+  let backpackObject = backpackObjectArray.find(
+    ({ id }) => id === backpack.id
+  );
+
+
+
+  console.log("Made it to my event function!")
+  console.log(event);
+}
+const strapForm = function (elements) {
+  console.log(elements)
+  elements.forEach((indvElement) =>{
+    let newForm = document.createElement("form");
+    let sideAttr = indvElement.getAttribute('data-side');
+    console.log('Im here!')
+    let formContent = `
+    <input type ="number" id="${sideAttr}length" name="${sideAttr}form">
+    <button type="button" class="strap-button" id="${sideAttr}-strap-button">Set ${sideAttr} Length</button>
+    `;
+    newForm.innerHTML = formContent;
+    indvElement.append(newForm);
+  })
+}
+
 const backpackList = backpackObjectArray.map((backpack) => {
   let backpackArticle = document.createElement("article");
   backpackArticle.classList.add("backpack");
@@ -64,6 +89,7 @@ const backpackList = backpackObjectArray.map((backpack) => {
       <li class="feature backpack__strap" data-side="left">Left strap length: <span>${
         backpack.strapLength.left
       } inches</span></li>
+      
       <li class="feature backpack__strap" data-side="right">Right strap length: <span>${
         backpack.strapLength.right
       } inches</span></li>
@@ -73,6 +99,17 @@ const backpackList = backpackObjectArray.map((backpack) => {
     </ul>
     <button class="lid-toggle">Open lid</button>
   `;
+
+  let strapElements = backpackArticle.querySelectorAll(".backpack__strap");
+  strapForm(strapElements);
+
+  const strapButtons = backpackArticle.querySelectorAll(".strap-button");
+  strapButtons.forEach((indvButton)=>{
+    indvButton.addEventListener("click",(event)=>{
+      formEvent(event,indvButton,backpackArticle);
+    })
+
+  })
 
   let button = backpackArticle.querySelector(".lid-toggle");
   let newArg = "The argument I want to pass to the callback function!";
@@ -85,9 +122,11 @@ const backpackList = backpackObjectArray.map((backpack) => {
   return backpackArticle;
 });
 
+
 // Append each backpack item to the main
 const main = document.querySelector(".maincontent");
 
 backpackList.forEach((backpack) => {
   main.append(backpack);
 });
+
